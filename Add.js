@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { FRUITS } from './Data';
@@ -7,11 +7,17 @@ import { FRUITS } from './Data';
 const Add = ({ navigation }) => {
     const [name, setName] = useState('');
     const [category, setCategory] = useState('');
-    const [id] = useState(Math.floor(Math.random() * 1000));
+    const [id] = useState(Date.now());
 
     const saveFruit = () => {
+        if (!name || !category) {
+            Alert.alert('Error', 'Please enter both name and category');
+            return;
+        }
+
+        const newFruit = { id, name, category };
+        navigation.navigate('Home', { newFruit });
         console.log(`Add fruit with id ${id}: ${name} (${category})`);
-        navigation.goBack();
     };
 
     const categories = Object.keys(FRUITS).map((category) => ({

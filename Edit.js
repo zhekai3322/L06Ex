@@ -5,9 +5,10 @@ import { FRUITS, images } from './Data';
 import RNPickerSelect from 'react-native-picker-select';
 
 const Edit = ({ route, navigation }) => {
-    const [name, setName] = useState(route.params.fruit.name);
-    const [category, setCategory] = useState(route.params.fruit.category);
-    const [id, setId] = useState(route.params.fruit.id);
+    const { fruit } = route.params;
+    const [name, setName] = useState(fruit.name);
+    const [category, setCategory] = useState(fruit.category);
+    const [id, setId] = useState(fruit.id);
 
     const saveFruit = () => {
         console.log(`Update fruit with id ${id}: ${name} (${category})`);
@@ -26,8 +27,7 @@ const Edit = ({ route, navigation }) => {
                 {
                     text: 'Delete',
                     onPress: () => {
-                        console.log(`Delete fruit with id ${id}`);
-                        navigation.goBack();
+                        navigation.navigate('Home', { deletedFruitId: id });
                     },
                 },
             ],

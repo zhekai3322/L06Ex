@@ -10,19 +10,21 @@ const FruitItem = ({ fruit, navigation }) => (
     </TouchableOpacity>
 );
 
-const FruitList = ({ category, navigation }) => (
-    <View style={[styles.section, { backgroundColor: FRUITS[category].color }]}>
-        <Text style={styles.header}>{FRUITS[category].icon} {category}</Text>
-        <FlatList
-            data={FRUIT_LIST[category]}
-            renderItem={({ item }) => <FruitItem fruit={item} navigation={navigation} />}
-            keyExtractor={(item) => item.id.toString()}
-        />
-    </View>
-);
+const FruitList = ({ category, navigation }) => {
+    if (!FRUIT_LIST[category]) {
+        return <Text>No fruits available for this category.</Text>;
+    }
 
-const deleteFruit = (id) => {
-    console.log(`Delete fruit with id ${id}`);
+    return (
+        <View style={[styles.section, { backgroundColor: FRUITS[category].color }]}>
+            <Text style={styles.header}>{FRUITS[category].icon} {category}</Text>
+            <FlatList
+                data={FRUIT_LIST[category]}
+                renderItem={({ item }) => <FruitItem fruit={item} navigation={navigation} />}
+                keyExtractor={(item) => item.id.toString()}
+            />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -53,15 +55,6 @@ const styles = StyleSheet.create({
     image: {
         width: 80,
         height: 80,
-    },
-    deleteButton: {
-        backgroundColor: '#ff0000',
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-    },
-    deleteButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
     },
 });
 

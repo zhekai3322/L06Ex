@@ -1,11 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 import FruitList from './FruitList.js';
 import { FRUIT_LIST } from './Data';
 
-const HomeScreen = ({ navigation }) => {
-    const sections = Object.keys(FRUIT_LIST);
+const HomeScreen = ({ navigation, route }) => {
+    const [fruitList, setFruitList] = useState(FRUIT_LIST);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setFruitList(FRUIT_LIST);
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
+        if (route.params?.newFruit) {
+            const newFruit = route.params.newFruit;
+            const category = newFruit.category;
+            if (!fruitList[category]) {
+                fruitList[category] = [];
+            }
+            fruitList[category].push(newFruit);
+            setFruitList({ ...fruitList });
+        }
+    }, [route.params?.newFruit]);
+
+    useEffect(() => {
+        if (route.params?.deletedFruitId) {
+            const deletedFruitId = route.params.deletedFruitId;
+            const newFruitList = { ...fruitList };
+            Object.keys(newFruitList).forEach((category) => {
+                newFruitList[category] = newFruitList[category].filter((fruit) => fruit.id !== deletedFruitId);
+            });
+            setFruitList(newFruitList);
+        }
+    }, [route.params?.deletedFruitId]);
+
+    const sections = Object.keys(fruitList);
 
     return (
         <View style={styles.container}>
