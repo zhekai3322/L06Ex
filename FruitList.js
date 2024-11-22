@@ -7,9 +7,6 @@ const FruitItem = ({ fruit, navigation }) => (
     <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Edit', { fruit })}>
         <Text style={styles.name}>{fruit.name}</Text>
         <Image source={images[fruit.id]} style={styles.image} />
-        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteFruit(fruit.id)}>
-            <Text style={styles.deleteButtonText}>Delete</Text>
-        </TouchableOpacity>
     </TouchableOpacity>
 );
 
